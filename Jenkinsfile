@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo 'جاري فحص ملفات البايثون...'
                 // الأمر ده بيتأكد إن ملف app.py ملوش أخطاء Syntax
-                sh 'python -m py_compile app.py' 
+                sh 'python3 -m py_compile app.py' 
             }
         }
 
