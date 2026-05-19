@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # 1. خدمة الداتا بيز (بوستجر)
+  db:
+    image: postgres:15-alpine
+    container_name: hospital-postgres-db
+    environment:
+      POSTGRES_USER: ahmeddb
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: hospital_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # دي عشان لو مسحنا الكونتينر الداتا ماتطيرش
+
+  # 2. خدمة تطبيق المستشفى (فلاسك)
+  web:
+    build: . # معناها روح اقرأ الـ Dockerfile اللي هنا وابني الـ Image
+    container_name: hospital-flask-app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db # بنقول لدوكر ماتشغلش الفلاسك غير لما الداتا بيز تقوم الأول
+    environment:
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/app # دي حركة صياعة عشان أي تعديل تعمله في الكود يسمع جوه الكونتينر من غير ما تبنيه تاني
+
+volumes:
+  postgres_data:
